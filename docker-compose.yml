@@ -1,0 +1,29 @@
+# version: '3.8'
+
+services:
+
+  info-gest2:
+    container_name: docker_chatbot_info-gest2
+    build:
+      context: info-gest2    
+      target: development
+    working_dir: /code/info-gest2
+    ports:
+      - 3000:3000
+    volumes:
+      - ./info-gest2:/code
+      - /code/node_modules
+    networks:
+      info-gest2:
+        ipv4_address: 192.30.0.7
+    environment:
+       - CHOKIDAR_USEPOLLING=true
+    # env_file:
+    #    - ./info-gest2/.env
+
+networks:
+  info-gest2:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.30.0.0/24
