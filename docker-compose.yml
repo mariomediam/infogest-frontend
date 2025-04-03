@@ -2,27 +2,35 @@
 
 services:
 
-  info-gest2:
-    container_name: docker_chatbot_info-gest2
+  info-gest:
+    container_name: frontend_info-gest
     build:
-      context: info-gest2    
+      context: info-gest    
       target: development
-    working_dir: /code/info-gest2
+    working_dir: /code
     ports:
-      - 3000:3000
+      - "3000:3000"
     volumes:
-      - ./info-gest2:/code
+      - ./info-gest:/code
       - /code/node_modules
     networks:
-      info-gest2:
+      info-gest:
         ipv4_address: 192.30.0.7
     environment:
-       - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - NODE_ENV=development
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     # env_file:
-    #    - ./info-gest2/.env
+    #    - ./info-gest/.env
 
 networks:
-  info-gest2:
+  info-gest:
     driver: bridge
     ipam:
       config:
